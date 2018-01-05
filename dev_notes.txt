@@ -1,0 +1,7 @@
+Here is a link to Bitcoin developer documentation on wallet key formats:
+https://bitcoin.org/en/developer-guide#wallet-files
+
+Here is a JavaScript library that we can use to create the QR codes:
+http://davidshimjs.github.io/qrcodejs/
+
+
