@@ -7,6 +7,7 @@ This repo is for a bitcoin paper wallet generator.
 Team Members:<br/>
 <ul><li>Matt Nutsch</li>
 <li>Trevor Frame</li>
+<li>Jigar Gor</li>
 <li>Harlin Glovacki</li></ul>
 
 Concept:<br/>
