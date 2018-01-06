@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+	
+    <title>Bitcoin Key Generator</title>
+	
+	<!-- Library used for SHA-256 hash -->
+	<!-- https://github.com/Caligatio/jsSHA -->
+	<script src="./js/sha_js/src/sha.js"></script>
+	
+	<!-- Library used for QR codes -->
+	<!-- https://github.com/davidshimjs/qrcodejs -->
+	<script src="./js/qrcode_js/qrcode.min.js"></script>
+	
+  </head>
+  <body>
+  
+	
+	<button onclick="generateBitcoinKeys();">Generate Key</button><br/><br/>
+
+	<div>
+		<div style="width:50%; float: left;">
+			Private Key:<br/>
+			<span id="privateKey"></span><br/><br/>
+			<div id="qrcodePrivate"></div>
+		</div>
+		
+		<div style="width:50%; float: left;">
+			Public Key:<br/>
+			<span id="publicKey"></span><br/><br/>
+			<div id="qrcodePublic"></div>
+		</div>
+	</div>
+  
+  </body>
+  
+  <script type="text/javascript">
+
+  
+	function generateHexString(length) 
+	{
+	  var ret = "";
+	  var randomChar = "";
+	  var i = 0;
+	  
+	  var possible = "ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789";
+	  
+	  while (ret.length < length) 
+	  {
+		ret += possible.charAt(Math.floor(Math.random() * possible.length));
+		
+		i = i + 1;
+	  }
+	  return ret.substring(0,length);
+	}
+	
+	
+	var privateKey = "";
+	var hash = "";
+	var hash2 = "";
+	
+	/**********************************************
+	*function generateBitcoinKeys()
+	*Description: This function generates private and public key pairs
+	*
+	**********************************************/
+	function generateBitcoinKeys()
+	{	
+		//clear the qr code div contents
+		var privateKeyQR = document.getElementById('qrcodePrivate');
+		var publicKeyQR = document.getElementById('qrcodePublic');
+		privateKeyQR.innerHTML = null;
+		publicKeyQR.innerHTML = null;
+	
+		//generate private key
+		// 256-bit WEP: 58 digit key
+		privateKey = generateHexString(58);
+		console.log("private key: " + privateKey);	
+		
+		//add 0x80 to the front
+		//String.fromCharCode(0x80) + privateKey; //dev note: production
+		String.fromCharCode(0xef) + privateKey; //dev note: test
+		
+		console.log("modified output: " + privateKey);
+		
+		//generate public key using SHA-256
+		//library for SHA-256: https://github.com/Caligatio/jsSHA
+		var sha256 = new jsSHA('SHA-256', 'TEXT');
+		sha256.update(privateKey);
+		hash = sha256.getHash("HEX");
+		
+		console.log("hashed key: " + hash);
+		
+		//generate a second hash
+		//library for SHA-256: https://github.com/Caligatio/jsSHA
+		var sha256SecondHash = new jsSHA('SHA-256', 'TEXT');
+		sha256SecondHash.update(sha256);
+		hash2 = sha256SecondHash.getHash("HEX");
+		
+		console.log("hashed hash: " + hash2);
+		
+		var privateKeySpan = document.getElementById('privateKey');
+		var publicKeySpan = document.getElementById('publicKey');
+		
+		privateKeySpan.innerHTML = privateKey;
+		publicKeySpan.innerHTML = hash;
+		
+		//generate QR code of private key
+		new QRCode(document.getElementById("qrcodePrivate"), privateKey);
+		
+		//generate QR code of public key
+		new QRCode(document.getElementById("qrcodePublic"), hash);
+
+	}
+	
+  </script>
+  
+  
+</html>
