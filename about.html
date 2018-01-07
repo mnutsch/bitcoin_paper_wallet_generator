@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>About</title>
+	<meta charset="utf-8">
+	
+	  <!-- local stylesheet-->
+  <link rel="stylesheet" href="./css/style.css">
+  
+  <!-- bootsrap library import and compatibility for mobile devices added-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+  <body>
+	<nav class="navbar navbar-inverse navbar-static-top">
+	  <div class="container">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span> 
+		  </button>
+		  <a class="navbar-brand" href="#">Bitcoin Wallet Generator</a>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+		  <ul class="nav navbar-nav navbar-right">
+			<li><a href="./index.html">Home</a></li>
+			<li><a href="./about.html">About</a></li>
+			<li><a href="./dev-notes.html">Dev Notes</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</nav>
+	<div id="about" class="container">
+		<div class="row">
+			<!--bootstrap tab interface-->
+			<!--allows user to toggle between tabs with a fade animation-->
+			<ul class="nav nav-tabs">
+			  <li class="active"><a data-toggle="tab" href="#paper-wallets">Paper Wallets</a></li>
+			  <li><a data-toggle="tab" href="#verify">Verify Key</a></li>
+			  <li><a data-toggle="tab" href="#more">More</a></li>
+			</ul>
+
+			<div class="tab-content">
+			  <div id="paper-wallets" class="tab-pane fade in active">
+				<h3>What are Paper Wallets?</h3>
+				<p>Add content here</p>
+			  </div>
+			  <div id="verify" class="tab-pane fade">
+				<h3>Verify your key</h3>
+				<p>And here</p>
+			  </div>
+			  <div id="more" class="tab-pane fade">
+				<h3>Learn More</h3>
+				<p>And here</p>
+			  </div>
+			</div>	
+		</div>
+
+	
+	</div>
+	
+	
+	
+	
+  </body>
+
+  
+  
+</html>
