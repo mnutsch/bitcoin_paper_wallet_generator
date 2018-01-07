@@ -33,7 +33,7 @@
 			<div id="qrcodePrivate"></div>
 		</div>
 		
-		<div style="width:50%; float: left;">
+		<div style="width:50%; float: right;">
 			<span id="walletAddressLabel"></span><br/>
 			<span id="walletAddress"></span><br/><br/>
 			<div id="qrcodeWallet"></div>
@@ -243,8 +243,8 @@
 		privateKeySpan.innerHTML = privateKeyHex;
 		walletAddressSpan.innerHTML = address;
 		
-		privateKeyLabel.innerHTML = "Private Key:";
-		walletAddressLabel.innerHTML = "Public Wallet Address:";
+		privateKeyLabel.innerHTML = "Private Key:</br>SECRET!";
+		walletAddressLabel.innerHTML = "Public Wallet Address:<br/>SHARE THIS";
 		
 		//generate QR code of private key
 		new QRCode(document.getElementById("qrcodePrivate"), privateKeyHex);
