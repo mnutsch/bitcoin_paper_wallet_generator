@@ -1,108 +1,132 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-
+<html lang="en">
+<head>
     <title>Bitcoin Key Generator</title>
-
+	<meta charset="utf-8">
 	<!-- Library used for QR codes -->
 	<!-- https://github.com/davidshimjs/qrcodejs -->
 	<script src="./js/qrcode_js/qrcode.min.js"></script>
-
 	<!-- Library used for address generation -->
 	<!-- http://procbits.com/media/2013/08/bitcoinjs-min.js -->
 	<script src="./js/bitcoin_js/bitcoinjs-min-legacy.js"></script>
-
-
-  </head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
   <body>
-
-	<h2>Bitcoin Wallet Generator</h2>
-
-	<strong>What does this do?</strong><br/>
-	When you click the Generate Wallet button, the app will create a new random paper wallet for you to use.
-	This wallet is designed for Bitcoin and Bitcoin derivates (such as Bitcoin Cash).
-	Print the page or save your key information in a secure place.
-	<br/><br/>
-	<button onclick="generateBitcoinKeys();">Generate Wallet</button><br/><br/>
-
+	<nav class="navbar navbar-inverse navbar-static-top">
+	  <div class="container">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span> 
+		  </button>
+		  <a class="navbar-brand" href="#">Bitcoin Wallet Generator</a>
+		</div>
+		<div class="collapse navbar-collapse" id="myNavbar">
+		  <ul class="nav navbar-nav navbar-right">
+			<li><a href="/">Home</a></li>
+			<li><a href="/about">About</a></li>
+			<li><a href="/dev-notes">Dev Notes</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</nav>
 	<div>
-		<div style="width:50%; float: left;">
+		<div class="container text-center">
+			<h2>Bitcoin Wallet Generator</h2>
+			
+			<strong>What does this do?</strong><br/>
+			When you click the Generate Wallet button, the app will create a new random paper wallet for you to use.
+			This wallet is designed for Bitcoin and Bitcoin derivates (such as Bitcoin Cash).
+			Print the page or save your key information in a secure place.
+			<br/><br/>
+			<button class="btn btn-primary" onclick="generateBitcoinKeys();">Generate Wallet</button><br/><br/>
+		
+	<div class="row">
+		<div class="col-md-6">
 			<span id="privateKeyLabel"></span><br/>
 			<span id="privateKey"></span><br/><br/>
 			<div id="qrcodePrivate"></div>
 		</div>
-
-		<div style="width:50%; float: right;">
+		
+		<div class="col-md-6">
 			<span id="walletAddressLabel"></span><br/>
 			<span id="walletAddress"></span><br/><br/>
 			<div id="qrcodeWallet"></div>
 		</div>
+		
 	</div>
-
-	<br/>
-
-	<div><em>Disclaimer: This app was created for educational purposes. This is experimental software. Use at your own risk.</em></div>
-
+	<div class="container-fluid"><em>Disclaimer: This app was created for educational purposes. This is experimental software. Use at your own risk.</em></div>
+	</div>
+	
+	
+  </div>
   </body>
 
-  <script type="text/javascript">
 
+  
+<script type="text/javascript">
 
-	function generateHexString(length)
+  
+	function generateHexString(length) 
 	{
 	  var ret = "";
 	  var randomChar = "";
 	  var i = 0;
-
-	  var possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz123456789";
-
-	  while (ret.length < length)
+	  
+	  var possible = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjklmnopqrstuvwxyz123456789";
+	  
+	  while (ret.length < length) 
 	  {
 		ret += possible.charAt(Math.floor(Math.random() * possible.length));
-
+		
 		i = i + 1;
 	  }
 	  return ret.substring(0,length);
 	}
-
-
+	
+	
 	var privateKey = "";
 	var publicKey = "";
 	var hash2 = "";
-
+	
 	/**********************************************
 	*function generateBitcoinKeys()
 	*Description: This function generates private and public key pairs
 	*
 	**********************************************/
 	function generateBitcoinKeys()
-	{
+	{	
 		//clear the qr code div contents
 		var privateKeyQR = document.getElementById('qrcodePrivate');
 		var walletAddressQR = document.getElementById('qrcodeWallet');
 		privateKeyQR.innerHTML = null;
 		walletAddressQR.innerHTML = null;
-
+	
 		var privateKeyLabel = document.getElementById('privateKeyLabel');
 		var walletAddressLabel = document.getElementById('walletAddressLabel');
 		privateKeyLabel.innerHTML = null;
 		walletAddressLabel.innerHTML = null;
-
+		
 		//generate random string
-
+	
 		privateKey = generateHexString(58);
-		console.log("random string: " + privateKey);
-
-
+		console.log("random string: " + privateKey);	
+		
+		
 		/******************************************/
-
+		
 		//following example from http://procbits.com/2013/08/27/generating-a-bitcoin-address-with-javascript
 		//originally written/posted by jprichardson on 8-27-2013
-
+		
 		//generate a private key
 		console.log("generating a private key...");
-
+		
 		var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 		window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 
@@ -111,20 +135,20 @@
 		for (var i = 0; i < randArr.length; ++i)
 		  privateKeyBytes[i] = randArr[i]
 
-		//if you want to follow the step-by-step results in this article, comment the
+		//if you want to follow the step-by-step results in this article, comment the 
 		//previous code and uncomment the following
 		//var privateKeyBytes = Crypto.util.hexToBytes("1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD")
 
 		//hex string of our private key
 		var privateKeyHex = Crypto.util.bytesToHex(privateKeyBytes).toUpperCase()
-		console.log(privateKeyHex)
-
-
+		console.log(privateKeyHex) 
+		
+		
 		//generate a wallet import format
 		console.log("generating a wallet import format...");
-
+		
 		//add 0x80 to the front, https://en.bitcoin.it/wiki/List_of_address_prefixes
-		var privateKeyAndVersion = "ef" + privateKeyHex
+		var privateKeyAndVersion = "80" + privateKeyHex
 		var firstSHA = Crypto.SHA256(Crypto.util.hexToBytes(privateKeyAndVersion))
 		var secondSHA = Crypto.SHA256(Crypto.util.hexToBytes(firstSHA))
 		var checksum = secondSHA.substr(0, 8).toUpperCase()
@@ -135,28 +159,28 @@
 		//console.log(keyWithChecksum) //"801184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD206EC97E"
 
 		var privateKeyWIF = Bitcoin.Base58.encode(Crypto.util.hexToBytes(keyWithChecksum))
-		console.log(privateKeyWIF)
-
-
+		console.log(privateKeyWIF) 
+		
+		
 		//shorter alternative to generate a wallet import format
 		console.log("generating an alternative wallet import format...");
-
+		
 		//recall, "privateKeyBytes" is an array of random numbers
-		var privateKeyWIF = new Bitcoin.Address(privateKeyBytes)
+		var privateKeyWIF = new Bitcoin.Address(privateKeyBytes) 
 		privateKeyWIF.version = 0x80 //0x80 = 128, https://en.bitcoin.it/wiki/List_of_address_prefixes
 		privateKeyWIF = privateKeyWIF.toString()
-		console.log(privateKeyWIF)
-
-
+		console.log(privateKeyWIF) 
+		
+		
 		//generate a public key
 		console.log("generating a public key...");
-
+		
 		var curve = getSECCurveByName("secp256k1") //found in bitcoinjs-lib/src/jsbn/sec.js
 
 		//convert our random array or private key to a Big Integer
-
+		
 		// var privateKeyBN = BigInteger.fromByteArrayUnsigned(input) //dev note: original version
-		var privateKeyBN = BigInteger.fromByteArrayUnsigned(privateKey)
+		var privateKeyBN = BigInteger.fromByteArrayUnsigned(privateKey) 
 
 		var curvePt = curve.getG().multiply(privateKeyBN)
 		var x = curvePt.getX().toBigInteger()
@@ -168,11 +192,11 @@
 
 		console.log(publicKeyHex)
 
-
-
+		
+		
 		//generate a compressed public key
 		console.log("generating a compressed public key...");
-
+		
 		var publicKeyBytesCompressed = integerToBytes(x,32) //x from above
 		if (y.isEven())
 		  publicKeyBytesCompressed.unshift(0x02)
@@ -181,26 +205,26 @@
 
 		var publicKeyHexCompressed = Crypto.util.bytesToHex(publicKeyBytesCompressed)
 		console.log(publicKeyHexCompressed)
-
-
-
+	
+		
+		
 		//shorter alternative to generate a compressed public key
 		console.log("generating an compressed public key alternative ...");
-
+		
 		//privateKeyBytes is the private key array from the top
-		var eckey = new Bitcoin.ECKey(privateKeyBytes)
+		var eckey = new Bitcoin.ECKey(privateKeyBytes) 
 		var publicKeyHex = Crypto.util.bytesToHex(eckey.getPub())
 		console.log(publicKeyHex)
-
+	
 
 		eckey.compressed = true
 		var publicKeyHexCompressed = Crypto.util.bytesToHex(eckey.getPub())
-
-
+		
+		
 		//generate compressed private key
-
+		
 		console.log("generating a compressed private key...");
-
+		
 		var privateKeyBytesCompressed = privateKeyBytes.slice(0) //clone array
 		privateKeyBytesCompressed.push(0x01)
 		var privateKeyWIFCompressed = new Bitcoin.Address(privateKeyBytesCompressed)
@@ -208,12 +232,12 @@
 		privateKeyWIFCompressed = privateKeyWIFCompressed.toString()
 
 		console.log(privateKeyWIFCompressed)
-
+		
 
 		//generate a wallet address
-
+		
 		console.log("generating a wallet address...");
-
+		
 		//could use publicKeyBytesCompressed as well
 		var hash160 = Crypto.RIPEMD160(Crypto.util.hexToBytes(Crypto.SHA256(publicKeyBytes)))
 		//console.log(hash160) //"3c176e659bea0f29a3e9bf7880c112b1b31b4dc8"
@@ -224,42 +248,42 @@
 
 		var doubleSHA = Crypto.SHA256(Crypto.util.hexToBytes(Crypto.SHA256(hashAndBytes)))
 		var addressChecksum = doubleSHA.substr(0,8)
-
+		
 
 		var unencodedAddress = "00" + hash160 + addressChecksum
 		//console.log(unencodedAddress)
-
+	
 
 		var address = Bitcoin.Base58.encode(Crypto.util.hexToBytes(unencodedAddress))
 		console.log(address) //16UjcYNBG9GTK4uq2f7yYEbuifqCzoLMGS
-
-
+		
+		
 		/**********************************************************************/
-
+		
 		//set the values displayed to the user
 		var privateKeySpan = document.getElementById('privateKey');
 		var walletAddressSpan = document.getElementById('walletAddress');
-
+		
 		privateKeySpan.innerHTML = privateKeyHex;
 		walletAddressSpan.innerHTML = address;
-
+		
 		privateKeyLabel.innerHTML = "Private Key:</br>SECRET!";
 		walletAddressLabel.innerHTML = "Public Wallet Address:<br/>SHARE THIS";
-
+		
 		//generate QR code of private key
 		new QRCode(document.getElementById("qrcodePrivate"), privateKeyHex);
-
+		
 		//generate QR code of public key
 		new QRCode(document.getElementById("qrcodeWallet"), address);
-
-
+		
+		
 		/**********************************************************************/
-
+		
 		//dev note: validate with this app: https://bitcoinpaperwallet.com/bitcoinpaperwallet/generate-wallet.html?design=alt-testnet#
 		//dev note: or validate with this app: https://www.bitaddress.org/
 	}
-
+	
   </script>
-
-
+  
+  
 </html>
