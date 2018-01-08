@@ -158,12 +158,12 @@
 		var firstSHA = Crypto.SHA256(Crypto.util.hexToBytes(privateKeyAndVersion))
 		var secondSHA = Crypto.SHA256(Crypto.util.hexToBytes(firstSHA))
 		var checksum = secondSHA.substr(0, 8).toUpperCase()
-		//console.log(checksum) //"206EC97E"
+		//console.log(checksum) 
 
 		//append checksum to end of the private key and version
 		var keyWithChecksum = privateKeyAndVersion + checksum
-		//console.log(keyWithChecksum) //"801184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD206EC97E"
-
+		//console.log(keyWithChecksum) 
+		
 		var privateKeyWIF = Bitcoin.Base58.encode(Crypto.util.hexToBytes(keyWithChecksum))
 		console.log(privateKeyWIF) 
 		
@@ -246,9 +246,9 @@
 		
 		//could use publicKeyBytesCompressed as well
 		var hash160 = Crypto.RIPEMD160(Crypto.util.hexToBytes(Crypto.SHA256(publicKeyBytes)))
-		//console.log(hash160) //"3c176e659bea0f29a3e9bf7880c112b1b31b4dc8"
+		//console.log(hash160)
 
-		var version = 0x00 //if using testnet, would use 0x6F or 111.
+		var version = 0x00 //prod is 0x00; if using testnet, would use 0x6F or 111.
 		var hashAndBytes = Crypto.util.hexToBytes(hash160)
 		hashAndBytes.unshift(version)
 
@@ -261,7 +261,27 @@
 	
 
 		var address = Bitcoin.Base58.encode(Crypto.util.hexToBytes(unencodedAddress))
-		console.log(address) //16UjcYNBG9GTK4uq2f7yYEbuifqCzoLMGS
+		console.log(address) 
+		
+		
+		console.log("generating a wallet address alternative 2...");
+		
+		var address = new Bitcoin.Address(Crypto.util.hexToBytes(hash160))
+		address.version = 0x00 //prod is 0x00; testnet would be 0x6F
+		address = address.toString()
+		console.log(address) 
+
+		
+		console.log("generating a wallet address alternative 3...");
+		var address = eckey.getBitcoinAddress().toString() //"eckey" from above
+		console.log(address) 
+
+		//you must generate a new one if you already called getBitcoinAddress() for the
+		//address representing the uncompressed version
+		var eckey2 = new Bitcoin.ECKey(privateKeyBytes)
+		eckey2.compressed = true
+		var addressForCompressed = eckey2.getBitcoinAddress().toString()
+		console.log(addressForCompressed) 
 		
 		
 		/**********************************************************************/
@@ -270,14 +290,14 @@
 		var privateKeySpan = document.getElementById('privateKey');
 		var walletAddressSpan = document.getElementById('walletAddress');
 		
-		privateKeySpan.innerHTML = privateKeyHex;
+		privateKeySpan.innerHTML = privateKeyWIFCompressed;
 		walletAddressSpan.innerHTML = address;
 		
-		privateKeyLabel.innerHTML = "Private Key:</br>SECRET!";
+		privateKeyLabel.innerHTML = "Compressed Private Key:</br>SECRET!";
 		walletAddressLabel.innerHTML = "Public Wallet Address:<br/>SHARE THIS";
 		
 		//generate QR code of private key
-		new QRCode(document.getElementById("qrcodePrivate"), privateKeyHex);
+		new QRCode(document.getElementById("qrcodePrivate"), privateKeyWIFCompressed);
 		
 		//generate QR code of public key
 		new QRCode(document.getElementById("qrcodeWallet"), address);
